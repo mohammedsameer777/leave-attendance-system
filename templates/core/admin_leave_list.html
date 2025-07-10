@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>All Leave Requests</h2>
+
+  {% for leave in leaves %}
+    {% include "core/partials/leave_status.html" with leave=leave %}
+  {% endfor %}
+{% endblock %}

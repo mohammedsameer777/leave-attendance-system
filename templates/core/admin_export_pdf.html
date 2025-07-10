@@ -1,0 +1,39 @@
+{% load custom_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Exported Leave Requests</title>
+    <style>
+        h1 { text-align: center; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid black; padding: 6px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Exported Leave Requests</h1>
+
+    {% if queryset %}
+        <table>
+            <thead>
+                <tr>
+                    {% for field in field_names %}
+                        <th>{{ field|capfirst }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        {% for field in field_names %}
+                            <td>{{ obj|get_field_display:field }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No records found.</p>
+    {% endif %}
+</body>
+</html>

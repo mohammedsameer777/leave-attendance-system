@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>My Attendance History</h2>
+  <form method="post" action="{% url 'mark_attendance' %}">
+    {% csrf_token %}
+    <button type="submit">Mark Today’s Attendance</button>
+  </form>
+  <ul>
+    {% for record in attendance %}
+      <li>{{ record.date }} - {% if record.present %}✔ Present{% else %}❌ Absent{% endif %}</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

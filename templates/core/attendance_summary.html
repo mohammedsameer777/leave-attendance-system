@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Attendance Summary for {{ selected_date }}</h2>
+
+  <form method="get">
+    <input type="date" name="date" value="{{ selected_date|date:'Y-m-d' }}">
+    <button type="submit">View</button>
+  </form>
+
+  {% if is_holiday %}
+    <p><strong>Note:</strong> This day is marked as a holiday.</p>
+  {% endif %}
+
+  <h3>✅ Present Users</h3>
+  <ul>
+    {% for user in present_users %}
+      <li>{{ user.username }}</li>
+    {% empty %}
+      <li>No one is present</li>
+    {% endfor %}
+  </ul>
+
+  <h3>❌ Absent Users</h3>
+  <ul>
+    {% for user in absent_users %}
+      <li>{{ user.username }}</li>
+    {% empty %}
+      <li>No absentees</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

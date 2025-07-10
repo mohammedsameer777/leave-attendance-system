@@ -1,0 +1,19 @@
+<div id="leave-{{ leave.id }}">
+  <p>{{ leave.employee }} - {{ leave.start_date }} to {{ leave.end_date }} - <strong>{{ leave.status }}</strong></p>
+  
+  {% if leave.status == "PENDING" %}
+    <button 
+      hx-get="{% url 'update_leave_status' leave.id 'APPROVED' %}" 
+      hx-target="#leave-{{ leave.id }}" 
+      hx-swap="outerHTML">
+      Approve
+    </button>
+    
+    <button 
+      hx-get="{% url 'update_leave_status' leave.id 'REJECTED' %}" 
+      hx-target="#leave-{{ leave.id }}" 
+      hx-swap="outerHTML">
+      Reject
+    </button>
+  {% endif %}
+</div>

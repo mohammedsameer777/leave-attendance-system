@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>My Leave History</h2>
+  {% if leaves %}
+    <ul>
+      {% for leave in leaves %}
+        <li>{{ leave.start_date }} to {{ leave.end_date }}: <strong>{{ leave.status }}</strong> - {{ leave.reason }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You have not applied for any leave yet.</p>
+  {% endif %}
+{% endblock %}
