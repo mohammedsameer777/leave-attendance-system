@@ -1,18 +1,11 @@
-{% extends "base.html" %}
-{% block content %}
-  <h2>Manual Attendance Entry</h2>
-
-  {% if messages %}
-    <ul>
-      {% for message in messages %}
-        <li style="color: green;">{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit Attendance</button>
-  </form>
-{% endblock %}
+<form method="post">
+  {% csrf_token %}
+  <h3>Select users to mark as PRESENT (for today: {{ today }}):</h3>
+  {% for user in users %}
+    <label>
+      <input type="checkbox" name="user_ids" value="{{ user.id }}">
+      {{ user.username }}
+    </label><br>
+  {% endfor %}
+  <button type="submit">✅ Mark Attendance</button>
+</form>

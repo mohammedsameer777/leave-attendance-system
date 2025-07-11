@@ -1,7 +1,8 @@
 from django import forms
-from .models import LeaveRequest,Attendance
+from .models import LeaveRequest, Attendance
 from django.contrib.auth.models import User
 from django.utils import timezone
+
 
 class LeaveForm(forms.ModelForm):
     class Meta:
@@ -21,6 +22,8 @@ class LeaveForm(forms.ModelForm):
 
         if start_date and end_date and end_date < start_date:
             raise forms.ValidationError("End date cannot be before start date.")
+
+
 class ManualAttendanceForm(forms.ModelForm):
     user = forms.ModelChoiceField(queryset=User.objects.all(), label="Employee")
     date = forms.DateField(widget=forms.SelectDateWidget)

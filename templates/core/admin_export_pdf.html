@@ -1,39 +1,35 @@
-{% load custom_tags %}
+<!-- templates/core/admin_export_pdf.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <title>Exported Leave Requests</title>
+    <title>{{ title }}</title>
     <style>
-        h1 { text-align: center; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid black; padding: 6px; text-align: left; }
+        body { font-family: sans-serif; }
+        h2 { color: #333; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 8px; }
     </style>
 </head>
 <body>
-    <h1>Exported Leave Requests</h1>
+    <h2>Exported {{ title }}</h2>
 
-    {% if queryset %}
-        <table>
-            <thead>
-                <tr>
-                    {% for field in field_names %}
-                        <th>{{ field|capfirst }}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for obj in queryset %}
-                    <tr>
-                        {% for field in field_names %}
-                            <td>{{ obj|get_field_display:field }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No records found.</p>
-    {% endif %}
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for obj in queryset %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ obj.name }}</td>
+                <td>{{ obj.date }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
