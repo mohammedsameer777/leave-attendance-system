@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
 import io
+from django.db.models import F
 
-
-from .models import LeaveRequest, Holiday, LeaveLog, Attendance, LeaveType
+from .models import LeaveRequest, Holiday, LeaveLog, Attendance, LeaveType,LeaveBalance
 
 # --------------------- Custom Admin Actions ---------------------
 
@@ -13,6 +13,18 @@ from .models import LeaveRequest, Holiday, LeaveLog, Attendance, LeaveType
 def approve_leaves(modeladmin, request, queryset):
     for leave in queryset:
         if leave.status != 'APPROVED':
+            # 👇 Optional: reduce leave balance
+            try:
+                LeaveBalance.objects.filter(
+                    employee=leave.employee,
+                    leave_type=leave.leave_type
+                ).update(
+                    balance=F('balance') - (leave.end_date - leave.start_date).days + 1
+                )
+            except LeaveBalance.DoesNotExist:
+                pass  # or handle it if needed
+
+            # 👇 Log and approve
             LeaveLog.objects.create(
                 leave=leave,
                 changed_by=request.user,
@@ -22,6 +34,7 @@ def approve_leaves(modeladmin, request, queryset):
             leave.status = 'APPROVED'
             leave.save()
 
+# ✅ Reject action
 @admin.action(description='Reject selected leave requests')
 def reject_leaves(modeladmin, request, queryset):
     for leave in queryset:
@@ -34,7 +47,6 @@ def reject_leaves(modeladmin, request, queryset):
             )
             leave.status = 'REJECTED'
             leave.save()
-
 @admin.action(description='Export selected leave requests to PDF')
 def export_selected_to_pdf(modeladmin, request, queryset):
     html_string = render_to_string('core/admin_export_pdf.html', {'queryset': queryset})
