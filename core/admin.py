@@ -16,10 +16,10 @@ def approve_leaves(modeladmin, request, queryset):
             # 👇 Optional: reduce leave balance
             try:
                 LeaveBalance.objects.filter(
-                    employee=leave.employee,
+                    user=leave.employee,
                     leave_type=leave.leave_type
                 ).update(
-                    balance=F('balance') - (leave.end_date - leave.start_date).days + 1
+                    remaining=F('remaining') - (leave.end_date - leave.start_date).days + 1
                 )
             except LeaveBalance.DoesNotExist:
                 pass  # or handle it if needed

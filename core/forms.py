@@ -1,5 +1,5 @@
 from django import forms
-from .models import LeaveRequest, Attendance
+from .models import LeaveRequest, Attendance,Holiday
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -20,9 +20,17 @@ class LeaveForm(forms.ModelForm):
         start_date = cleaned_data.get('start_date')
         end_date = cleaned_data.get('end_date')
 
-        if start_date and end_date and end_date < start_date:
-            raise forms.ValidationError("End date cannot be before start date.")
+        if start_date and end_date:
+            if end_date < start_date:
+                raise forms.ValidationError("End date cannot be before start date.")
 
+            # ✅ Check if any date in range is a holiday
+            holidays = Holiday.objects.filter(date__range=(start_date, end_date))
+            if holidays.exists():
+                holiday_names = ", ".join([h.name for h in holidays])
+                raise forms.ValidationError(
+                    f"You cannot apply leave on holiday(s): {holiday_names}."
+                )
 
 class ManualAttendanceForm(forms.ModelForm):
     user = forms.ModelChoiceField(queryset=User.objects.all(), label="Employee")
