@@ -25,6 +25,7 @@ urlpatterns = [
     path('attendance/history/', views.attendance_history, name='attendance_history'),
     path('attendance-summary/', views.attendance_summary, name='attendance_summary'),
     path('manual-attendance/', manual_attendance, name='manual_attendance'),
+    path('attendance/manual/self/', views.self_manual_attendance, name='self_manual_attendance'),
 
     # Exports
     path('export-attendance-pdf/', views.export_attendance_pdf, name='export_attendance_pdf'),

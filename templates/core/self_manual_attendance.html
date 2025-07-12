@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>📅 Mark Attendance for Today ({{ today }})</h2>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-success">Mark Myself Present</button>
+  </form>
+
+  <a href="{% url 'attendance_history' %}" class="btn btn-secondary mt-3">Back to Attendance History</a>
+{% endblock %}

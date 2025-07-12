@@ -128,6 +128,23 @@ def manual_attendance(request):
         "users": users,
         "today": today,
     })
+@login_required
+def self_manual_attendance(request):
+    today = timezone.localdate()
+
+    if request.method == "POST":
+        # Delete any duplicate attendance entries for today
+        Attendance.objects.filter(user=request.user, date=today).delete()
+
+        # Create fresh attendance
+        Attendance.objects.create(user=request.user, date=today, status="PRESENT")
+
+        messages.success(request, "Your attendance has been marked successfully.")
+        return redirect("attendance_history")
+
+    return render(request, "core/self_manual_attendance.html", {
+        "today": today
+    })
 
 
 @login_required
